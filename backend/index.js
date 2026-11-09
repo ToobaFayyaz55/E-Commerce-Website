@@ -1,3 +1,4 @@
+require('dotenv').config();
 const port = process.env.PORT || 4000;
 const express = require("express");
 const app = express();
@@ -12,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 // connection with Mongo Db
-mongoose.connect('mongodb+srv://laibamajeed29:laiba123@cluster0.akmwoyj.mongodb.net/E-Commerce')
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connected successfully'))
   .catch(err => console.error('❌ MongoDB connection error:', err));// API Creation
 
@@ -88,7 +89,7 @@ app.post('/createuser', async (req, res) => {
 
     const token = jwt.sign(
       { userId: newUser._id },
-      'secret_ecom',
+      process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
@@ -122,7 +123,7 @@ app.post('/login', async (req, res) => {
     // Create JWT token on successful login
     const token = jwt.sign(
       { userId: user._id },
-      'secret_ecom', // keep this secret consistent or use process.env.JWT_SECRET
+      process.env.JWT_SECRET, // keep this secret consistent or use process.env.JWT_SECRET
       { expiresIn: '1h' }
     );
 
